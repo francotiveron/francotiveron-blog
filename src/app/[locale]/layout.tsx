@@ -58,7 +58,7 @@ export default async function PageLayout({ children, params }: LayoutProps) {
             <main className={`${urbanist.variable} font-sans`}>
               <Header />
               {children}
-              <Footer />
+              {/* <Footer /> */}
             </main>
             <div id="portal" className={`${urbanist.variable} font-sans`} />
           </ContentfulPreviewProvider>
