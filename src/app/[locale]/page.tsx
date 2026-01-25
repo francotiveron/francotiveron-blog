@@ -75,9 +75,6 @@ export default async function Page({ params: { locale } }: LandingPageProps) {
         <p className="text-gray-600 mb-4">
           Everything Should Be Made as Simple as Possible, But Not Simpler (A.Einstein)
         </p>
-        <Link href={`/${locale}/about`} className="hover:underline" style={{ color: '#dc2626' }}>
-          ABOUT
-        </Link>
       </Container>
 
       {/* Tutorial: contentful-and-the-starter-template.md */}
