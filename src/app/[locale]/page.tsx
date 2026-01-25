@@ -60,22 +60,23 @@ export default async function Page({ params: { locale } }: LandingPageProps) {
     limit: 6,
     locale,
     order: PageBlogPostOrder.PublishedDateDesc,
-    where: {
-      slug_not: page?.featuredBlogPost?.slug,
-    },
     preview,
   });
   const posts = blogPostsData.pageBlogPostCollection?.items;
 
-  if (!page?.featuredBlogPost || !posts) {
+  if (!posts) {
     return;
   }
 
   return (
     <TranslationsProvider locale={locale} resources={resources}>
-      <Container>
-        <Link href={`/${page.featuredBlogPost.slug}`}>
-          <ArticleHero article={page.featuredBlogPost} />
+      <Container className="my-8 text-center">
+        <h1 className="text-4xl font-bold mb-2">Franco Tiveron</h1>
+        <p className="text-gray-600 mb-4">
+          Everything Should Be Made as Simple as Possible, But Not Simpler (A.Einstein)
+        </p>
+        <Link href={`/${locale}/about`} className="text-blue-600 hover:underline">
+          ABOUT
         </Link>
       </Container>
 
