@@ -71,11 +71,11 @@ export default async function Page({ params: { locale } }: LandingPageProps) {
   return (
     <TranslationsProvider locale={locale} resources={resources}>
       <Container className="my-8 text-center">
-        <h1 className="text-4xl font-bold mb-2 text-red-600">Franco Tiveron</h1>
+        <h1 className="text-4xl font-bold mb-2" style={{ color: '#dc2626' }}>Franco Tiveron</h1>
         <p className="text-gray-600 mb-4">
           Everything Should Be Made as Simple as Possible, But Not Simpler (A.Einstein)
         </p>
-        <Link href={`/${locale}/about`} className="text-red-600 hover:underline">
+        <Link href={`/${locale}/about`} className="hover:underline" style={{ color: '#dc2626' }}>
           ABOUT
         </Link>
       </Container>
