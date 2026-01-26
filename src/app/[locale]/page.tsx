@@ -57,7 +57,7 @@ export default async function Page({ params: { locale } }: LandingPageProps) {
   }
 
   const blogPostsData = await gqlClient.pageBlogPostCollection({
-    limit: 6,
+    limit: 100,
     locale,
     order: PageBlogPostOrder.PublishedDateDesc,
     preview,
@@ -71,7 +71,9 @@ export default async function Page({ params: { locale } }: LandingPageProps) {
   return (
     <TranslationsProvider locale={locale} resources={resources}>
       <Container className="my-8 text-center">
-        <h1 className="text-4xl font-bold mb-2" style={{ color: '#dc2626' }}>Franco Tiveron</h1>
+        <h1 className="mb-2 text-4xl font-bold" style={{ color: '#dc2626' }}>
+          Franco Tiveron
+        </h1>
         <p className="text-gray-600 mb-4">
           Everything Should Be Made as Simple as Possible, But Not Simpler (A.Einstein)
         </p>
@@ -83,7 +85,7 @@ export default async function Page({ params: { locale } }: LandingPageProps) {
       {/*  <div className="my-5 bg-colorTextLightest p-5 text-colorBlueLightest">{page.greeting}</div>*/}
       {/*</Container>*/}
 
-      <Container className="my-8  md:mb-10 lg:mb-16">
+      <Container className="my-8 md:mb-10 lg:mb-16">
         <h2 className="mb-4 md:mb-6">{t('landingPage.latestArticles')}</h2>
         <ArticleTileGrid className="md:grid-cols-2 lg:grid-cols-3" articles={posts} />
       </Container>
