@@ -1717,6 +1717,12 @@ export const RichImageFieldsFragmentDoc = gql`
 export const ReferencePageBlogPostFieldsFragmentDoc = gql`
     fragment ReferencePageBlogPostFields on PageBlogPost {
   __typename
+  contentfulMetadata {
+    tags {
+      id
+      name
+    }
+  }
   sys {
     id
     spaceId
@@ -1736,6 +1742,12 @@ export const ReferencePageBlogPostFieldsFragmentDoc = gql`
 export const PageBlogPostFieldsFragmentDoc = gql`
     fragment PageBlogPostFields on PageBlogPost {
   __typename
+  contentfulMetadata {
+    tags {
+      id
+      name
+    }
+  }
   sys {
     id
     spaceId
