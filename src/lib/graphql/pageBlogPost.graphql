@@ -22,6 +22,12 @@ fragment PageBlogPostFields on PageBlogPost {
     id
     spaceId
   }
+  contentfulMetadata {
+    tags {
+      id
+      name
+    }
+  }
   internalName
   seoFields {
     ...SeoFields

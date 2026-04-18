@@ -1,9 +1,8 @@
 import type { Metadata } from 'next';
 import { draftMode } from 'next/headers';
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
-import { ArticleHero, ArticleTileGrid } from '@src/components/features/article';
+import { ArticleList, ArticleTileGrid } from '@src/components/features/article';
 import { Container } from '@src/components/shared/container';
 import TranslationsProvider from '@src/components/shared/i18n/TranslationProvider';
 import initTranslations from '@src/i18n';
@@ -46,7 +45,7 @@ export async function generateMetadata({ params }: LandingPageProps): Promise<Me
 
 export default async function Page({ params: { locale } }: LandingPageProps) {
   const { isEnabled: preview } = draftMode();
-  const { t, resources } = await initTranslations({ locale });
+  const { resources } = await initTranslations({ locale });
   const gqlClient = preview ? previewClient : client;
 
   const landingPageData = await gqlClient.pageLanding({ locale, preview });
@@ -79,16 +78,11 @@ export default async function Page({ params: { locale } }: LandingPageProps) {
         </p>
       </Container>
 
-      {/* Tutorial: contentful-and-the-starter-template.md */}
-      {/* Uncomment the line below to make the Greeting field available to render */}
-      {/*<Container>*/}
-      {/*  <div className="my-5 bg-colorTextLightest p-5 text-colorBlueLightest">{page.greeting}</div>*/}
-      {/*</Container>*/}
-
       <Container className="my-8 md:mb-10 lg:mb-16">
-        <h2 className="mb-4 md:mb-6">{t('landingPage.latestArticles')}</h2>
-        <ArticleTileGrid className="md:grid-cols-2 lg:grid-cols-3" articles={posts} />
+        <h2 className="mb-6 text-2xl font-semibold">Articles</h2>
+        <ArticleList articles={posts} />
       </Container>
     </TranslationsProvider>
   );
 }
+
