@@ -1,7 +1,8 @@
 import { documentToReactComponents, Options } from '@contentful/rich-text-react-renderer';
-import { BLOCKS, Document } from '@contentful/rich-text-types';
+import { BLOCKS, Document, INLINES } from '@contentful/rich-text-types';
 
 import { ArticleImage } from '@src/components/features/article';
+import { LatexRenderer } from '@src/components/features/contentful/LatexRenderer';
 import { ComponentRichImage } from '@src/lib/__generated/sdk';
 
 export type EmbeddedEntryType = ComponentRichImage | null;
@@ -26,6 +27,15 @@ export const EmbeddedEntry = (entry: EmbeddedEntryType) => {
   }
 };
 
+// Extract plain text from a rich text node's content
+const nodeToText = (node: any): string => {
+  if (node.nodeType === 'text') return node.value;
+  if (node.content) return node.content.map(nodeToText).join('');
+  return '';
+};
+
+const hasLatex = (text: string) => text.includes('$latex');
+
 export const contentfulBaseRichTextOptions = ({ links }: ContentfulRichTextInterface): Options => ({
   renderNode: {
     [BLOCKS.EMBEDDED_ENTRY]: node => {
@@ -36,6 +46,17 @@ export const contentfulBaseRichTextOptions = ({ links }: ContentfulRichTextInter
       if (!entry) return null;
 
       return <EmbeddedEntry {...entry} />;
+    },
+    [BLOCKS.PARAGRAPH]: (node, children) => {
+      const text = nodeToText(node);
+      if (hasLatex(text)) {
+        return (
+          <p>
+            <LatexRenderer text={text} />
+          </p>
+        );
+      }
+      return <p>{children}</p>;
     },
   },
 });
