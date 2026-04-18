@@ -90,7 +90,7 @@ export default async function Page({ params: { locale, slug } }: BlogPageProps) 
       <Container>
         <ArticleHero article={blogPost} isFeatured={isFeatured} isReversedLayout={true} />
       </Container>
-      <Container className="mt-8 max-w-4xl">
+      <Container className="mt-8 mb-16 max-w-4xl">
         <ArticleContent article={blogPost} />
       </Container>
       {relatedPosts && relatedPosts.length > 0 && (
