@@ -1,32 +1,23 @@
 'use client';
 
-// @ts-ignore
-import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/prism';
-// @ts-ignore
-import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
-
 interface WordPressCodeBlockProps {
   text: string;
 }
 
 const LANGUAGE_MAP: Record<string, string> = {
-  fsharp: 'fsharp',
-  csharp: 'csharp',
-  'c#': 'csharp',
-  javascript: 'javascript',
-  js: 'javascript',
-  typescript: 'typescript',
-  ts: 'typescript',
-  python: 'python',
-  bash: 'bash',
-  sql: 'sql',
-  xml: 'xml',
-  json: 'json',
-  html: 'markup',
-  css: 'css',
+  fsharp: 'F#',
+  csharp: 'C#',
+  'c#': 'C#',
+  javascript: 'JavaScript',
+  js: 'JavaScript',
+  typescript: 'TypeScript',
+  python: 'Python',
+  bash: 'Bash',
+  sql: 'SQL',
+  xml: 'XML',
+  json: 'JSON',
 };
 
-// Renders a string that may contain WordPress [code language="..."]...[/code] blocks
 export const WordPressCodeBlock = ({ text }: WordPressCodeBlockProps) => {
   const parts = text.split(/(\[code[^\]]*\][\s\S]*?\[\/code\])/g);
 
@@ -37,21 +28,20 @@ export const WordPressCodeBlock = ({ text }: WordPressCodeBlockProps) => {
       {parts.map((part, i) => {
         const match = part.match(/^\[code(?:\s+language="([^"]*)")?\]([\s\S]*?)\[\/code\]$/);
         if (match) {
-          const lang = LANGUAGE_MAP[match[1]?.toLowerCase() ?? ''] ?? 'text';
+          const langKey = match[1]?.toLowerCase() ?? '';
+          const langLabel = LANGUAGE_MAP[langKey] ?? match[1] ?? '';
           const code = match[2].trim();
           return (
-            <SyntaxHighlighter
-              key={i}
-              language={lang}
-              style={oneLight}
-              customStyle={{
-                borderRadius: '0.5rem',
-                fontSize: '0.875rem',
-                margin: '1rem 0',
-              }}
-            >
-              {code}
-            </SyntaxHighlighter>
+            <div key={i} className="my-4 rounded-lg overflow-hidden border border-gray-200">
+              {langLabel && (
+                <div className="bg-gray-100 px-4 py-1 text-xs text-gray-500 font-mono border-b border-gray-200">
+                  {langLabel}
+                </div>
+              )}
+              <pre className="bg-gray-50 p-4 overflow-x-auto text-sm font-mono leading-relaxed">
+                <code>{code}</code>
+              </pre>
+            </div>
           );
         }
         return <span key={i}>{part}</span>;
