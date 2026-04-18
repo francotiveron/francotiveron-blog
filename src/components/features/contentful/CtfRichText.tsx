@@ -3,6 +3,7 @@ import { BLOCKS, Document, INLINES } from '@contentful/rich-text-types';
 
 import { ArticleImage } from '@src/components/features/article';
 import { LatexRenderer } from '@src/components/features/contentful/LatexRenderer';
+import { WordPressCodeBlock } from '@src/components/features/contentful/WordPressCodeBlock';
 import { ComponentRichImage } from '@src/lib/__generated/sdk';
 
 export type EmbeddedEntryType = ComponentRichImage | null;
@@ -49,10 +50,19 @@ export const contentfulBaseRichTextOptions = ({ links }: ContentfulRichTextInter
     },
     [BLOCKS.PARAGRAPH]: (node, children) => {
       const text = nodeToText(node);
-      if (hasLatex(text)) {
+      const hasLatexContent = hasLatex(text);
+      const hasCodeBlock = text.includes('[code');
+
+      if (hasLatexContent || hasCodeBlock) {
         return (
           <p>
-            <LatexRenderer text={text} />
+            {hasLatexContent && hasCodeBlock ? (
+              <WordPressCodeBlock text={text} />
+            ) : hasLatexContent ? (
+              <LatexRenderer text={text} />
+            ) : (
+              <WordPressCodeBlock text={text} />
+            )}
           </p>
         );
       }
