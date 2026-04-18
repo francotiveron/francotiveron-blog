@@ -93,7 +93,7 @@ export default async function Page({ params: { locale, slug } }: BlogPageProps) 
       <Container className="mt-8 max-w-4xl">
         <ArticleContent article={blogPost} />
       </Container>
-      {relatedPosts && (
+      {relatedPosts && relatedPosts.length > 0 && (
         <Container className="mt-8 max-w-5xl">
           <h2 className="mb-4 md:mb-6">{t('article.relatedArticles')}</h2>
           <ArticleTileGrid className="md:grid-cols-2" articles={relatedPosts} />
