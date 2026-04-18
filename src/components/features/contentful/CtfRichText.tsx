@@ -2,6 +2,7 @@ import { documentToReactComponents, Options } from '@contentful/rich-text-react-
 import { BLOCKS, Document } from '@contentful/rich-text-types';
 
 import { ArticleImage } from '@src/components/features/article';
+import { HighlightedCode } from '@src/components/features/contentful/HighlightedCode';
 import { LatexRenderer } from '@src/components/features/contentful/LatexRenderer';
 import { WordPressCodeBlock } from '@src/components/features/contentful/WordPressCodeBlock';
 import { ComponentRichImage } from '@src/lib/__generated/sdk';
@@ -130,6 +131,11 @@ export const CtfRichText = ({ json, links }: ContentfulRichTextInterface) => {
               if (!entry) return null;
               return <EmbeddedEntry {...entry} />;
             },
+            [BLOCKS.CODE]: (node: any) => {
+              const code = nodeToText(node);
+              const language = node.data?.language ?? '';
+              return <HighlightedCode code={code} language={language} />;
+            },
           },
         };
 
@@ -147,6 +153,11 @@ export const contentfulBaseRichTextOptions = ({ links }: ContentfulRichTextInter
       );
       if (!entry) return null;
       return <EmbeddedEntry {...entry} />;
+    },
+    [BLOCKS.CODE]: (node) => {
+      const code = nodeToText(node);
+      const language = node.data?.language ?? '';
+      return <HighlightedCode code={code} language={language} />;
     },
   },
 });
