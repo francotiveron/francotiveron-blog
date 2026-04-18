@@ -4,6 +4,12 @@ fragment ReferencePageBlogPostFields on PageBlogPost {
     id
     spaceId
   }
+  contentfulMetadata {
+    tags {
+      id
+      name
+    }
+  }
   slug
   author {
     ...AuthorFields
