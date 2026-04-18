@@ -36,14 +36,14 @@ export const ArticleHero = ({
         isReversedLayout ? 'lg:flex-row-reverse' : 'lg:flex-row',
       )}
     >
-      <div className="flex-1 basis-1/2" {...inspectorProps({ fieldId: 'featuredImage' })}>
-        {article.featuredImage && (
+      {article.featuredImage && (
+        <div className="flex-1 basis-1/2" {...inspectorProps({ fieldId: 'featuredImage' })}>
           <CtfImage
             nextImageProps={{ className: 'w-full', priority: true, sizes: undefined }}
             {...article.featuredImage}
           />
-        )}
-      </div>
+        </div>
+      )}
 
       <div className="relative flex flex-1 basis-1/2 flex-col justify-center py-6 px-4 lg:px-16 lg:py-12 xl:px-24">
         <div className="mb-2 flex flex-wrap items-center">

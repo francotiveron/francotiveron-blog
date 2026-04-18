@@ -18,25 +18,29 @@ export const ArticleAuthor = ({ article }: ArticleAuthorProps) => {
 
   return (
     <div className="flex items-center">
-      <div
-        className="mr-2 overflow-hidden rounded-full border border-blue500"
-        {...inspectorProps({ fieldId: 'avatar' })}
-      >
-        {author?.avatar && (
-          <CtfImage
-            nextImageProps={{
-              width: 28,
-              height: 28,
-              sizes: undefined,
-              placeholder: undefined,
-            }}
-            {...author.avatar}
-          />
-        )}
-      </div>
-      <span className="text-xs leading-none text-gray600" {...inspectorProps({ fieldId: 'name' })}>
-        {author?.name}
-      </span>
+      {author && (
+        <>
+          <div
+            className="mr-2 overflow-hidden rounded-full border border-blue500"
+            {...inspectorProps({ fieldId: 'avatar' })}
+          >
+            {author?.avatar && (
+              <CtfImage
+                nextImageProps={{
+                  width: 28,
+                  height: 28,
+                  sizes: undefined,
+                  placeholder: undefined,
+                }}
+                {...author.avatar}
+              />
+            )}
+          </div>
+          <span className="text-xs leading-none text-gray600" {...inspectorProps({ fieldId: 'name' })}>
+            {author?.name}
+          </span>
+        </>
+      )}
     </div>
   );
 };
