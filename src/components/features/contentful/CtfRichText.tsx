@@ -1,5 +1,5 @@
 import { documentToReactComponents, Options } from '@contentful/rich-text-react-renderer';
-import { BLOCKS, Document, INLINES } from '@contentful/rich-text-types';
+import { BLOCKS, Document } from '@contentful/rich-text-types';
 
 import { ArticleImage } from '@src/components/features/article';
 import { LatexRenderer } from '@src/components/features/contentful/LatexRenderer';

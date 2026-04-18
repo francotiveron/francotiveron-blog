@@ -1,6 +1,8 @@
 'use client';
 
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+// @ts-ignore
+import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/prism';
+// @ts-ignore
 import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 interface WordPressCodeBlockProps {
