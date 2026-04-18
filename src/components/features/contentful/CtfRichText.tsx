@@ -7,7 +7,7 @@ import javascript from 'highlight.js/lib/languages/javascript';
 import typescript from 'highlight.js/lib/languages/typescript';
 import python from 'highlight.js/lib/languages/python';
 import bash from 'highlight.js/lib/languages/bash';
-import 'highlight.js/styles/github.css';
+import 'highlight.js/styles/github-dark.css';
 
 import { ArticleImage } from '@src/components/features/article';
 import { LatexRenderer } from '@src/components/features/contentful/LatexRenderer';
@@ -77,7 +77,7 @@ export const contentfulBaseRichTextOptions = ({ links }: ContentfulRichTextInter
               {language === 'fsharp' ? 'F#' : language === 'csharp' ? 'C#' : language}
             </div>
           )}
-          <pre className="p-4 overflow-x-auto leading-relaxed bg-white m-0">
+          <pre className="p-4 overflow-x-auto leading-relaxed bg-gray-900 m-0">
             <code
               className={`hljs${language ? ` language-${language}` : ''}`}
               dangerouslySetInnerHTML={{ __html: highlighted }}
