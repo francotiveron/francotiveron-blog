@@ -64,7 +64,7 @@ export const HighlightedCode = ({ code, language }: HighlightedCodeProps) => {
     } else {
       highlighted = hljs.highlightAuto(code).value;
     }
-  } catch (e) {
+  } catch (_e) {
     // fallback to plain text
   }
 

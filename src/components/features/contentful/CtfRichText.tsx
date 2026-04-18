@@ -131,7 +131,7 @@ export const CtfRichText = ({ json, links }: ContentfulRichTextInterface) => {
               if (!entry) return null;
               return <EmbeddedEntry {...entry} />;
             },
-            [BLOCKS.CODE]: (node: any) => {
+            ['code']: (node: any) => {
               const code = nodeToText(node);
               const language = node.data?.language ?? '';
               return <HighlightedCode code={code} language={language} />;
@@ -154,7 +154,7 @@ export const contentfulBaseRichTextOptions = ({ links }: ContentfulRichTextInter
       if (!entry) return null;
       return <EmbeddedEntry {...entry} />;
     },
-    [BLOCKS.CODE]: (node) => {
+    ['code']: (node) => {
       const code = nodeToText(node);
       const language = node.data?.language ?? '';
       return <HighlightedCode code={code} language={language} />;

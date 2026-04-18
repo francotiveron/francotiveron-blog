@@ -1,6 +1,6 @@
 'use client';
 
-import { HighlightedCode, LANGUAGE_MAP } from './HighlightedCode';
+import { HighlightedCode } from './HighlightedCode';
 
 interface WordPressCodeBlockProps {
   text: string;
