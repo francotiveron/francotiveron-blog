@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
 
-import { ArticleList, ArticleTileGrid } from '@src/components/features/article';
+import { ArticleList } from '@src/components/features/article';
 import { Container } from '@src/components/shared/container';
 import TranslationsProvider from '@src/components/shared/i18n/TranslationProvider';
 import initTranslations from '@src/i18n';
