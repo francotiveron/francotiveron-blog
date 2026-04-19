@@ -46,7 +46,7 @@ export const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
             return (
               <div className="my-6 rounded-lg overflow-hidden text-sm not-prose">
                 {language && (
-                  <div className="bg-gray-700 px-4 py-1.5 text-xs text-gray-300 font-mono border-b border-gray-600">
+                  <div className="bg-gray-700 px-3 py-1 text-xs text-gray-300 font-mono border-b border-gray-600">
                     {displayLang}
                   </div>
                 )}
@@ -54,7 +54,7 @@ export const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
                   style={oneDark}
                   language={language}
                   PreTag="div"
-                  customStyle={{ margin: 0, borderRadius: 0, fontSize: '0.85rem' }}
+                  customStyle={{ margin: 0, borderRadius: 0, fontSize: '0.85rem', padding: '0.75rem 1rem' }}
                 >
                   {String(children).replace(/\n$/, '')}
                 </SyntaxHighlighter>
