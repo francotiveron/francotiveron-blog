@@ -19,20 +19,32 @@ export const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
         remarkPlugins={[remarkMath, remarkGfm]}
         rehypePlugins={[rehypeKatex, rehypeHighlight]}
         components={{
-          pre({ children, ...props }) {
+          pre({ children }) {
+            // Extract language from the child code element
+            const codeEl = (children as any)?.props;
+            const className = codeEl?.className || '';
+            const match = /language-(\w+)/.exec(className);
+            const language = match ? match[1] : '';
+            const displayLang =
+              language === 'fsharp' ? 'F#' :
+              language === 'csharp' ? 'C#' :
+              language;
+
             return (
-              <div className="my-4 rounded-lg overflow-hidden border border-gray-200 text-sm not-prose">
-                <pre className="p-4 overflow-x-auto leading-relaxed bg-gray-900 m-0" {...props}>
+              <div className="my-6 rounded-lg overflow-hidden text-sm not-prose">
+                {language && (
+                  <div className="bg-gray-700 px-4 py-1.5 text-xs text-gray-300 font-mono">
+                    {displayLang}
+                  </div>
+                )}
+                <pre className="p-4 overflow-x-auto leading-relaxed bg-gray-900 m-0">
                   {children}
                 </pre>
               </div>
             );
           },
           code({ className, children, ...props }) {
-            const match = /language-(\w+)/.exec(className || '');
-            const language = match ? match[1] : '';
             const isInline = !className;
-
             if (isInline) {
               return (
                 <code className="bg-gray-100 text-gray-800 px-1 py-0.5 rounded text-sm font-mono" {...props}>
@@ -40,25 +52,10 @@ export const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
                 </code>
               );
             }
-
-            const displayLang =
-              language === 'fsharp' ? 'F#' :
-              language === 'csharp' ? 'C#' :
-              language;
-
             return (
-              <div className="my-4 rounded-lg overflow-hidden border border-gray-200 text-sm not-prose">
-                {language && (
-                  <div className="bg-gray-100 px-4 py-1.5 text-xs text-gray-500 font-mono border-b border-gray-200">
-                    {displayLang}
-                  </div>
-                )}
-                <pre className="p-4 overflow-x-auto leading-relaxed bg-gray-900 m-0">
-                  <code className={className} {...props}>
-                    {children}
-                  </code>
-                </pre>
-              </div>
+              <code className={className} {...props}>
+                {children}
+              </code>
             );
           },
         }}
