@@ -836,6 +836,7 @@ export type PageBlogPost = Entry & _Node & {
   featuredImage?: Maybe<Asset>;
   internalName?: Maybe<Scalars['String']>;
   linkedFrom?: Maybe<PageBlogPostLinkingCollections>;
+  markdownBody?: Maybe<Scalars['String']>;
   publishedDate?: Maybe<Scalars['DateTime']>;
   relatedBlogPostsCollection?: Maybe<PageBlogPostRelatedBlogPostsCollection>;
   seoFields?: Maybe<ComponentSeo>;
@@ -1564,7 +1565,7 @@ export type ReferencePageBlogPostFieldsFragment = { __typename: 'PageBlogPost', 
     & ImageFieldsFragment
   ) | null };
 
-export type PageBlogPostFieldsFragment = { __typename: 'PageBlogPost', internalName?: string | null, slug?: string | null, publishedDate?: any | null, title?: string | null, shortDescription?: string | null, contentfulMetadata: { __typename?: 'ContentfulMetadata', tags: Array<{ __typename?: 'ContentfulTag', id?: string | null, name?: string | null } | null> }, sys: { __typename?: 'Sys', id: string, spaceId: string }, seoFields?: (
+export type PageBlogPostFieldsFragment = { __typename: 'PageBlogPost', internalName?: string | null, slug?: string | null, publishedDate?: any | null, title?: string | null, shortDescription?: string | null, markdownBody?: string | null, contentfulMetadata: { __typename?: 'ContentfulMetadata', tags: Array<{ __typename?: 'ContentfulTag', id?: string | null, name?: string | null } | null> }, sys: { __typename?: 'Sys', id: string, spaceId: string }, seoFields?: (
     { __typename?: 'ComponentSeo' }
     & SeoFieldsFragment
   ) | null, author?: (
@@ -1763,6 +1764,7 @@ export const PageBlogPostFieldsFragmentDoc = gql`
   publishedDate
   title
   shortDescription
+  markdownBody
   featuredImage {
     ...ImageFields
   }
