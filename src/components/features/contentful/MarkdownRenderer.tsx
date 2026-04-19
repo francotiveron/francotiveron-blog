@@ -19,6 +19,9 @@ const LANG_DISPLAY: Record<string, string> = {
   javascript: 'JavaScript',
   python: 'Python',
   bash: 'Bash',
+  nasm: 'ASM',
+  c: 'C',
+  cpp: 'C++',
 };
 
 export const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
