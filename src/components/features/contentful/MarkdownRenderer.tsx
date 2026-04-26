@@ -28,7 +28,7 @@ export const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
   return (
     <article className="prose prose-sm max-w-none">
       <ReactMarkdown
-        remarkPlugins={[remarkMath, remarkGfm]}
+        remarkPlugins={[remarkGfm, remarkMath]}
         rehypePlugins={[rehypeKatex]}
         components={{
           blockquote({ children }: any) {
