@@ -31,6 +31,13 @@ export const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
         remarkPlugins={[remarkMath, remarkGfm]}
         rehypePlugins={[rehypeKatex]}
         components={{
+          blockquote({ children }: any) {
+            return (
+              <div className="my-6 rounded-lg bg-gray-100 border-l-4 border-gray-400 px-6 py-4 text-gray-700 not-prose text-sm leading-relaxed">
+                {children}
+              </div>
+            );
+          },
           code({ className, children, ...props }: any) {
             const match = /language-(\w+)/.exec(className || '');
             const language = match ? match[1] : '';
