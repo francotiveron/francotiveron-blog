@@ -72,8 +72,13 @@ function CopyButton({ code }: { code: string }) {
 }
 
 const mdComponents = {
-  pre({ children }: any) {
-    return <>{children}</>;
+  pre({ children, ...props }: any) {
+    // Only unwrap if child is our custom code block (has a div wrapper)
+    const child = Array.isArray(children) ? children[0] : children;
+    if (child?.props?.className?.includes('language-')) {
+      return <>{children}</>;
+    }
+    return <pre {...props}>{children}</pre>;
   },
   code({ className, children, ...props }: any) {
     const match = /language-(\w+)/.exec(className || '');
