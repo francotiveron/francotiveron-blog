@@ -49,7 +49,7 @@ function splitSections(md: string): Section[] {
     }
 
     if (isQuote) {
-      currentLines.push(line === '>' ? '' : line.slice(2));
+      currentLines.push(line === '>' ? '' : line.replace(/^>\s*/, ''));
     } else {
       currentLines.push(line);
     }
