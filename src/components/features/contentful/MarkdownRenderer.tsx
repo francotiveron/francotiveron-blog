@@ -91,6 +91,14 @@ const mdComponents = {
     const displayLang = LANG_DISPLAY[language] || language;
     const codeString = String(children).replace(/\n$/, '');
 
+    if (!language) {
+      return (
+        <pre className="my-4 bg-gray-100 rounded p-4 text-sm font-mono overflow-x-auto not-prose">
+          <code>{codeString}</code>
+        </pre>
+      );
+    }
+
     return (
       <div className="my-6 rounded-lg overflow-hidden text-sm not-prose border border-gray-700 bg-gray-900">
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-700 bg-gray-800">
