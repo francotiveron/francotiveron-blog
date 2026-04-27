@@ -16,9 +16,6 @@ export const Header = () => {
             <Link href="/" className="text-sm font-semibold tracking-widest uppercase hover:text-gray-600 transition-colors">
               Home
             </Link>
-            <Link href="/blog" className="text-sm font-semibold tracking-widest uppercase hover:text-gray-600 transition-colors">
-              Blog
-            </Link>
           </div>
           <div className="flex items-center gap-4">
             <a href="https://github.com/francotiveron" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-black transition-colors" title="GitHub">
