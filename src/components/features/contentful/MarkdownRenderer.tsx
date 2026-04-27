@@ -108,7 +108,7 @@ export const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
   const sections = splitSections(content);
 
   return (
-    <article className="prose prose-sm max-w-none">
+    <article className="prose prose-sm max-w-none text-justify">
       {sections.map((section, i) =>
         section.type === 'blockquote' ? (
           <div
