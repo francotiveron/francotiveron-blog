@@ -1,11 +1,12 @@
 'use client';
 
+import { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkMath from 'remark-math';
 import remarkGfm from 'remark-gfm';
 import rehypeKatex from 'rehype-katex';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import 'katex/dist/katex.min.css';
 
 interface MarkdownRendererProps {
@@ -42,12 +43,7 @@ function splitSections(md: string): Section[] {
   for (const line of lines) {
     const isQuote = line.startsWith('> ') || line === '>';
     const lineType: 'blockquote' | 'normal' = isQuote ? 'blockquote' : 'normal';
-
-    if (lineType !== currentType) {
-      flush();
-      currentType = lineType;
-    }
-
+    if (lineType !== currentType) { flush(); currentType = lineType; }
     if (isQuote) {
       currentLines.push(line === '>' ? '' : line.replace(/^>+\s*/, ''));
     } else {
@@ -56,6 +52,23 @@ function splitSections(md: string): Section[] {
   }
   flush();
   return sections;
+}
+
+function CopyButton({ code }: { code: string }) {
+  const [copied, setCopied] = useState(false);
+  const handleCopy = () => {
+    navigator.clipboard.writeText(code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+  return (
+    <button
+      onClick={handleCopy}
+      className="text-xs text-gray-500 hover:text-gray-800 border border-gray-300 rounded px-2 py-0.5 transition-colors"
+    >
+      {copied ? 'Copied!' : 'Copy'}
+    </button>
+  );
 }
 
 const mdComponents = {
@@ -73,21 +86,21 @@ const mdComponents = {
     }
 
     const displayLang = LANG_DISPLAY[language] || language;
+    const codeString = String(children).replace(/\n$/, '');
 
     return (
-      <div className="my-6 rounded-lg overflow-hidden text-sm not-prose">
-        {language && (
-          <div className="bg-gray-700 px-3 py-1 text-xs text-gray-300 font-mono border-b border-gray-600">
-            {displayLang}
-          </div>
-        )}
+      <div className="my-6 rounded-lg overflow-hidden text-sm not-prose border border-gray-200">
+        <div className="flex items-center justify-between bg-gray-50 px-4 py-2 border-b border-gray-200">
+          <span className="text-xs font-semibold text-gray-600">{displayLang || 'Code'}</span>
+          <CopyButton code={codeString} />
+        </div>
         <SyntaxHighlighter
-          style={oneDark}
+          style={oneLight}
           language={language}
           PreTag="div"
-          customStyle={{ margin: 0, borderRadius: 0, fontSize: '0.85rem', padding: '0.75rem 1rem' }}
+          customStyle={{ margin: 0, borderRadius: 0, fontSize: '0.85rem', padding: '1rem', background: '#fff' }}
         >
-          {String(children).replace(/\n$/, '')}
+          {codeString}
         </SyntaxHighlighter>
       </div>
     );
@@ -113,7 +126,7 @@ export const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
         section.type === 'blockquote' ? (
           <div
             key={i}
-            className="my-6 rounded-lg bg-gray-100 border-l-4 border-gray-400 px-6 py-4 text-gray-700 text-sm leading-relaxed not-prose [&_a]:text-blue-600 [&_a]:underline [&_a]:hover:text-blue-800"
+            className="my-6 rounded-lg bg-gray-100 border-l-4 border-gray-400 px-6 py-4 text-gray-700 text-sm leading-relaxed not-prose [&_a]:text-blue-600 [&_a]:underline [&_a]:hover:text-blue-800 text-justify"
           >
             <MD content={section.content} />
           </div>
