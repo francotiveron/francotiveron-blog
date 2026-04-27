@@ -113,7 +113,7 @@ export const MarkdownRenderer = ({ content }: MarkdownRendererProps) => {
         section.type === 'blockquote' ? (
           <div
             key={i}
-            className="my-6 rounded-lg bg-gray-100 border-l-4 border-gray-400 px-6 py-4 text-gray-700 text-sm leading-relaxed not-prose"
+            className="my-6 rounded-lg bg-gray-100 border-l-4 border-gray-400 px-6 py-4 text-gray-700 text-sm leading-relaxed not-prose [&_a]:text-blue-600 [&_a]:underline [&_a]:hover:text-blue-800"
           >
             <MD content={section.content} />
           </div>
