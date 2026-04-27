@@ -1768,16 +1768,6 @@ export const PageBlogPostFieldsFragmentDoc = gql`
   featuredImage {
     ...ImageFields
   }
-  content {
-    json
-    links {
-      entries {
-        block {
-          ...RichImageFields
-        }
-      }
-    }
-  }
   relatedBlogPostsCollection(limit: 2) {
     items {
       ...ReferencePageBlogPostFields
