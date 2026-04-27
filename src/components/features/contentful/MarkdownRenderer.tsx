@@ -72,6 +72,9 @@ function CopyButton({ code }: { code: string }) {
 }
 
 const mdComponents = {
+  pre({ children }: any) {
+    return <>{children}</>;
+  },
   code({ className, children, ...props }: any) {
     const match = /language-(\w+)/.exec(className || '');
     const language = match ? match[1] : '';
@@ -89,8 +92,8 @@ const mdComponents = {
     const codeString = String(children).replace(/\n$/, '');
 
     return (
-      <div className="my-6 rounded-lg overflow-hidden text-sm not-prose border border-gray-200">
-        <div className="flex items-center justify-between bg-gray-50 px-4 py-2 border-b border-gray-200">
+      <div className="my-6 rounded-lg overflow-hidden text-sm not-prose border border-gray-200 bg-white">
+        <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 bg-gray-50">
           <span className="text-xs font-semibold text-gray-600">{displayLang || 'Code'}</span>
           <CopyButton code={codeString} />
         </div>
@@ -98,7 +101,7 @@ const mdComponents = {
           style={oneLight}
           language={language}
           PreTag="div"
-          customStyle={{ margin: 0, borderRadius: 0, fontSize: '0.85rem', padding: '1rem', background: '#fff' }}
+          customStyle={{ margin: 0, borderRadius: 0, fontSize: '0.85rem', padding: '1rem', background: '#ffffff' }}
         >
           {codeString}
         </SyntaxHighlighter>
