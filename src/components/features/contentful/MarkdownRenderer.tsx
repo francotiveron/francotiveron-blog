@@ -6,7 +6,7 @@ import remarkMath from 'remark-math';
 import remarkGfm from 'remark-gfm';
 import rehypeKatex from 'rehype-katex';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { oneLight } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { vs } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import 'katex/dist/katex.min.css';
 
 interface MarkdownRendererProps {
@@ -98,7 +98,7 @@ const mdComponents = {
           <CopyButton code={codeString} />
         </div>
         <SyntaxHighlighter
-          style={oneLight}
+          style={vs}
           language={language}
           PreTag="div"
           customStyle={{ margin: 0, borderRadius: 0, fontSize: '0.85rem', padding: '1rem', background: '#ffffff' }}
