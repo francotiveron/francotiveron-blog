@@ -6,7 +6,7 @@ import remarkMath from 'remark-math';
 import remarkGfm from 'remark-gfm';
 import rehypeKatex from 'rehype-katex';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vs } from 'react-syntax-highlighter/dist/cjs/styles/prism';
+import { oneDark } from 'react-syntax-highlighter/dist/cjs/styles/prism';
 import 'katex/dist/katex.min.css';
 
 interface MarkdownRendererProps {
@@ -64,7 +64,7 @@ function CopyButton({ code }: { code: string }) {
   return (
     <button
       onClick={handleCopy}
-      className="text-xs text-gray-500 hover:text-gray-800 border border-gray-300 rounded px-2 py-0.5 transition-colors"
+      className="text-xs text-gray-400 hover:text-white border border-gray-600 rounded px-2 py-0.5 transition-colors"
     >
       {copied ? 'Copied!' : 'Copy'}
     </button>
@@ -92,16 +92,16 @@ const mdComponents = {
     const codeString = String(children).replace(/\n$/, '');
 
     return (
-      <div className="my-6 rounded-lg overflow-hidden text-sm not-prose border border-gray-200 bg-white">
-        <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 bg-gray-50">
-          <span className="text-xs font-semibold text-gray-600">{displayLang || 'Code'}</span>
+      <div className="my-6 rounded-lg overflow-hidden text-sm not-prose border border-gray-700 bg-gray-900">
+        <div className="flex items-center justify-between px-4 py-2 border-b border-gray-700 bg-gray-800">
+          <span className="text-xs font-semibold text-gray-300">{displayLang || 'Code'}</span>
           <CopyButton code={codeString} />
         </div>
         <SyntaxHighlighter
-          style={vs}
+          style={oneDark}
           language={language}
           PreTag="div"
-          customStyle={{ margin: 0, borderRadius: 0, fontSize: '0.85rem', padding: '1rem', background: '#ffffff' }}
+          customStyle={{ margin: 0, borderRadius: 0, fontSize: '0.85rem', padding: '1rem', background: '#282c34' }}
         >
           {codeString}
         </SyntaxHighlighter>
