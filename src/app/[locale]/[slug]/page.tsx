@@ -8,9 +8,17 @@ import initTranslations from '@src/i18n';
 import { defaultLocale, locales } from '@src/i18n/config';
 import { client, previewClient } from '@src/lib/client';
 
-export async function generateMetadata({
-  params: { locale, slug },
-}: BlogPageProps): Promise<Metadata> {
+// 1. UPDATE THE INTERFACE: params is now a Promise in Next.js 15
+interface BlogPageProps {
+  params: Promise<{
+    locale: string;
+    slug: string;
+  }>;
+}
+
+export async function generateMetadata(props: BlogPageProps): Promise<Metadata> {
+  // 2. AWAIT PARAMS HERE
+  const { locale, slug } = await props.params;
   const { isEnabled: preview } = await draftMode();
   const gqlClient = preview ? previewClient : client;
 
@@ -40,12 +48,12 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams({
-  params: { locale },
+  params,
 }: {
-  params: { locale: string };
-}): Promise<BlogPageProps['params'][]> {
+  params: { locale: string }; // Keep this synchronous as next.js passes it synchronously to generateStaticParams
+}): Promise<{ locale: string; slug: string }[]> {
   const gqlClient = client;
-  const { pageBlogPostCollection } = await gqlClient.pageBlogPostCollection({ locale, limit: 100 });
+  const { pageBlogPostCollection } = await gqlClient.pageBlogPostCollection({ locale: params.locale, limit: 100 });
 
   if (!pageBlogPostCollection?.items) {
     throw new Error('No blog posts found');
@@ -55,20 +63,15 @@ export async function generateStaticParams({
     .filter((blogPost): blogPost is NonNullable<typeof blogPost> => Boolean(blogPost?.slug))
     .map(blogPost => {
       return {
-        locale,
+        locale: params.locale,
         slug: blogPost.slug!,
       };
     });
 }
 
-interface BlogPageProps {
-  params: {
-    locale: string;
-    slug: string;
-  };
-}
-
-export default async function Page({ params: { locale, slug } }: BlogPageProps) {
+export default async function Page(props: BlogPageProps) {
+  // 3. AWAIT PARAMS HERE TOO
+  const { locale, slug } = await props.params;
   const { isEnabled: preview } = await draftMode();
   const gqlClient = preview ? previewClient : client;
   const { t } = await initTranslations({ locale });
