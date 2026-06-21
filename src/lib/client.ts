@@ -1,7 +1,7 @@
 import { GraphQLClient } from 'graphql-request';
 
 import { getSdk } from '@src/lib/__generated/sdk';
-import { endpoint } from 'codegen';
+import { endpoint, previewEndpoint } from 'codegen';
 
 const graphQlClient = new GraphQLClient(endpoint, {
   headers: {
@@ -9,7 +9,7 @@ const graphQlClient = new GraphQLClient(endpoint, {
   },
 });
 
-const previewGraphQlClient = new GraphQLClient(endpoint, {
+const previewGraphQlClient = new GraphQLClient(previewEndpoint, {
   headers: {
     Authorization: `Bearer ${process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN}`,
   },
