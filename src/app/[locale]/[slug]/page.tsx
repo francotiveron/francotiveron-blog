@@ -7,9 +7,9 @@ import { Container } from '@src/components/shared/container';
 import initTranslations from '@src/i18n';
 import { defaultLocale, locales } from '@src/i18n/config';
 import { client, previewClient } from '@src/lib/client';
+
 export const dynamic = 'force-dynamic';
 
-// 1. UPDATE THE INTERFACE: params is now a Promise in Next.js 15
 interface BlogPageProps {
   params: Promise<{
     locale: string;
@@ -18,7 +18,6 @@ interface BlogPageProps {
 }
 
 export async function generateMetadata(props: BlogPageProps): Promise<Metadata> {
-  // 2. AWAIT PARAMS HERE
   const { locale, slug } = await props.params;
   const { isEnabled: preview } = await draftMode();
   const gqlClient = preview ? previewClient : client;
@@ -51,27 +50,32 @@ export async function generateMetadata(props: BlogPageProps): Promise<Metadata> 
 export async function generateStaticParams({
   params,
 }: {
-  params: { locale: string }; // Keep this synchronous as next.js passes it synchronously to generateStaticParams
+  params: { locale: string };
 }): Promise<{ locale: string; slug: string }[]> {
-  const gqlClient = client;
-  const { pageBlogPostCollection } = await gqlClient.pageBlogPostCollection({ locale: params.locale, limit: 100 });
+  const gqlClient = previewClient || client;
+  
+  try {
+    const { pageBlogPostCollection } = await gqlClient.pageBlogPostCollection({ locale: params.locale, limit: 100 });
 
-  if (!pageBlogPostCollection?.items) {
-    throw new Error('No blog posts found');
+    if (!pageBlogPostCollection?.items) {
+      return [];
+    }
+
+    return pageBlogPostCollection.items
+      .filter((blogPost): blogPost is NonNullable<typeof blogPost> => Boolean(blogPost?.slug))
+      .map(blogPost => {
+        return {
+          locale: params.locale,
+          slug: blogPost.slug!,
+        };
+      });
+  } catch (e) {
+    console.error("Static params generation fallback handled:", e);
+    return [];
   }
-
-  return pageBlogPostCollection.items
-    .filter((blogPost): blogPost is NonNullable<typeof blogPost> => Boolean(blogPost?.slug))
-    .map(blogPost => {
-      return {
-        locale: params.locale,
-        slug: blogPost.slug!,
-      };
-    });
 }
 
 export default async function Page(props: BlogPageProps) {
-  // 3. AWAIT PARAMS HERE TOO
   const { locale, slug } = await props.params;
   const { isEnabled: preview } = await draftMode();
   const gqlClient = preview ? previewClient : client;
