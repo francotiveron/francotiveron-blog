@@ -7,6 +7,7 @@ import { Container } from '@src/components/shared/container';
 import initTranslations from '@src/i18n';
 import { defaultLocale, locales } from '@src/i18n/config';
 import { client, previewClient } from '@src/lib/client';
+export const dynamic = 'force-dynamic';
 
 // 1. UPDATE THE INTERFACE: params is now a Promise in Next.js 15
 interface BlogPageProps {
