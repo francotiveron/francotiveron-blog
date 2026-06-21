@@ -5,6 +5,10 @@ const productionEndpoint = 'https://graphql.contentful.com/content/v1/spaces';
 export const endpoint = `${endpointOverride || productionEndpoint}/${
   process.env.CONTENTFUL_SPACE_ID
 }/environments/${process.env.CONTENTFUL_SPACE_ENVIRONMENT || 'master'}`;
+const previewProductionEndpoint = 'https://preview.contentful.com/content/v1/spaces';
+export const previewEndpoint = `${process.env.CONTENTFUL_GRAPHQL_PREVIEW_ENDPOINT || previewProductionEndpoint}/${
+    process.env.CONTENTFUL_SPACE_ID
+}/environments/${process.env.CONTENTFUL_SPACE_ENVIRONMENT || 'master'}`;
 
 export const config: CodegenConfig = {
   overwrite: true,
