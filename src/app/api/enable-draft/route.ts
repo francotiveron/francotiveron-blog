@@ -1,8 +1,7 @@
 import { cookies, draftMode } from 'next/headers';
-import { redirect } from 'next/navigation';
 import { NextRequest } from 'next/server';
 
-export async function GET(request: NextRequest): Promise<Response | void> {
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const secret = searchParams.get('x-contentful-preview-secret');
   const rawPath = searchParams.get('path');
@@ -19,25 +18,33 @@ export async function GET(request: NextRequest): Promise<Response | void> {
 
   const path = decodeURIComponent(rawPath);
 
-  // 3. Enable Draft Mode (Awaited for Next.js 15 compatibility)
-  const draft = await draftMode();
-  draft.enable();
+  try {
+    // 3. Enable Draft Mode safely (handles both Next.js 14 & 15 frameworks)
+    const draft = draftMode();
+    if (draft instanceof Promise) await draft;
+    (draft as any).enable();
 
-  // 4. Modify Cookie to bypass Cross-Site Iframe restrictions
-  const cookieStore = await cookies();
-  const cookie = cookieStore.get('__prerender_bypass');
+    // 4. Extract and patch the cookie safely
+    let cookieStore = cookies();
+    if (cookieStore instanceof Promise) cookieStore = await cookieStore;
+    
+    const cookie = cookieStore.get('__prerender_bypass');
 
-  if (cookie) {
-    cookieStore.set({
-      name: '__prerender_bypass',
-      value: cookie.value,
-      httpOnly: true,
-      path: '/',
-      secure: true,
-      sameSite: 'none', // Critical for Contentful Side-by-Side View
-    });
+    if (cookie) {
+      cookieStore.set({
+        name: '__prerender_bypass',
+        value: cookie.value,
+        httpOnly: true,
+        path: '/',
+        secure: true,
+        sameSite: 'none', // Required for Contentful's Iframe
+      });
+    }
+  } catch (cookieError) {
+    console.error('Failed to patch preview cookies:', cookieError);
+    // Fallback: don't crash the server if cookie tweaking fails
   }
 
-  // 5. Redirect to target page
-  redirect(path);
+  // 5. Native Response Redirect (avoids Next.js internal exception crashes)
+  return Response.redirect(new URL(path, request.url));
 }
