@@ -9,6 +9,7 @@ import { defaultLocale, locales } from '@src/i18n/config';
 import { client, previewClient } from '@src/lib/client';
 
 export const dynamic = 'force-dynamic';
+export const dynamicParams = true;
 
 interface BlogPageProps {
   params: Promise<{
@@ -22,29 +23,34 @@ export async function generateMetadata(props: BlogPageProps): Promise<Metadata> 
   const { isEnabled: preview } = await draftMode();
   const gqlClient = preview ? previewClient : client;
 
-  const { pageBlogPostCollection } = await gqlClient.pageBlogPost({ locale, slug, preview });
-  const blogPost = pageBlogPostCollection?.items[0];
+  try {
+    const { pageBlogPostCollection } = await gqlClient.pageBlogPost({ locale, slug, preview });
+    const blogPost = pageBlogPostCollection?.items[0];
 
-  const languages = Object.fromEntries(
-    locales.map(locale => [locale, locale === defaultLocale ? `/${slug}` : `/${locale}/${slug}`]),
-  );
-  const metadata: Metadata = {
-    alternates: {
-      canonical: slug,
-      languages,
-    },
-  };
-
-  if (blogPost?.seoFields) {
-    metadata.title = blogPost.seoFields.pageTitle;
-    metadata.description = blogPost.seoFields.pageDescription;
-    metadata.robots = {
-      follow: !blogPost.seoFields.nofollow,
-      index: !blogPost.seoFields.noindex,
+    const languages = Object.fromEntries(
+      locales.map(l => [l, l === defaultLocale ? `/${slug}` : `/${l}/${slug}`]),
+    );
+    
+    const metadata: Metadata = {
+      alternates: {
+        canonical: slug,
+        languages,
+      },
     };
-  }
 
-  return metadata;
+    if (blogPost?.seoFields) {
+      metadata.title = blogPost.seoFields.pageTitle;
+      metadata.description = blogPost.seoFields.pageDescription;
+      metadata.robots = {
+        follow: !blogPost.seoFields.nofollow,
+        index: !blogPost.seoFields.noindex,
+      };
+    }
+
+    return metadata;
+  } catch (e) {
+    return {};
+  }
 }
 
 export async function generateStaticParams({
@@ -70,7 +76,6 @@ export async function generateStaticParams({
         };
       });
   } catch (e) {
-    console.error("Static params generation fallback handled:", e);
     return [];
   }
 }
@@ -79,9 +84,13 @@ export default async function Page(props: BlogPageProps) {
   const { locale, slug } = await props.params;
   const { isEnabled: preview } = await draftMode();
   const gqlClient = preview ? previewClient : client;
+  
   const { t } = await initTranslations({ locale });
+  
+  // Fetching the dynamic data using the localized parameter maps
   const { pageBlogPostCollection } = await gqlClient.pageBlogPost({ locale, slug, preview });
   const { pageLandingCollection } = await gqlClient.pageLanding({ locale, preview });
+  
   const landingPage = pageLandingCollection?.items[0];
   const blogPost = pageBlogPostCollection?.items[0];
   const relatedPosts = blogPost?.relatedBlogPostsCollection?.items;
