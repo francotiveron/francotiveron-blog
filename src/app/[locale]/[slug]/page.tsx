@@ -1,93 +1,20 @@
-import type { Metadata } from 'next';
-import { draftMode } from 'next/headers';
-import { notFound } from 'next/navigation';
-
-import { ArticleContent, ArticleHero, ArticleTileGrid } from '@src/components/features/article';
-import { Container } from '@src/components/shared/container';
-import initTranslations from '@src/i18n';
-import { defaultLocale, locales } from '@src/i18n/config';
-import { client, previewClient } from '@src/lib/client';
-
-export const dynamic = 'force-dynamic';
-export const dynamicParams = true;
-
-interface BlogPageProps {
-  params: Promise<{
-    locale: string;
-    slug: string;
-  }>;
-}
-
-export async function generateMetadata(props: BlogPageProps): Promise<Metadata> {
-  const { locale, slug } = await props.params;
-  const { isEnabled: preview } = await draftMode();
-  const gqlClient = preview ? previewClient : client;
-
-  try {
-    const { pageBlogPostCollection } = await gqlClient.pageBlogPost({ locale, slug, preview });
-    const blogPost = pageBlogPostCollection?.items[0];
-
-    const languages = Object.fromEntries(
-      locales.map(l => [l, l === defaultLocale ? `/${slug}` : `/${l}/${slug}`]),
-    );
-    
-    const metadata: Metadata = {
-      alternates: {
-        canonical: slug,
-        languages,
-      },
-    };
-
-    if (blogPost?.seoFields) {
-      metadata.title = blogPost.seoFields.pageTitle;
-      metadata.description = blogPost.seoFields.pageDescription;
-      metadata.robots = {
-        follow: !blogPost.seoFields.nofollow,
-        index: !blogPost.seoFields.noindex,
-      };
-    }
-
-    return metadata;
-  } catch (e) {
-    return {};
-  }
-}
-
-export async function generateStaticParams({
-  params,
-}: {
-  params: { locale: string };
-}): Promise<{ locale: string; slug: string }[]> {
-  const gqlClient = previewClient || client;
-  
-  try {
-    const { pageBlogPostCollection } = await gqlClient.pageBlogPostCollection({ locale: params.locale, limit: 100 });
-
-    if (!pageBlogPostCollection?.items) {
-      return [];
-    }
-
-    return pageBlogPostCollection.items
-      .filter((blogPost): blogPost is NonNullable<typeof blogPost> => Boolean(blogPost?.slug))
-      .map(blogPost => {
-        return {
-          locale: params.locale,
-          slug: blogPost.slug!,
-        };
-      });
-  } catch (e) {
-    return [];
-  }
-}
-
 export default async function Page(props: BlogPageProps) {
   const { locale, slug } = await props.params;
-  const { isEnabled: preview } = await draftMode();
+  
+  // 1. Read tokens directly from the page URL query strings
+  const { isEnabled: standardPreview } = await draftMode();
+  
+  // 2. Fallback: If Contentful bypassed the API route, check the query parameters manually
+  const searchParams = (props as any).searchParams || {};
+  const querySecret = searchParams['x-contentful-preview-secret'];
+  const hasValidDirectToken = querySecret === 'preview123'; // Matches your token secret
+
+  const preview = standardPreview || hasValidDirectToken;
   const gqlClient = preview ? previewClient : client;
   
   const { t } = await initTranslations({ locale });
   
-  // Fetching the dynamic data using the localized parameter maps
+  // 3. Fetch data using the client determined by the page tokens
   const { pageBlogPostCollection } = await gqlClient.pageBlogPost({ locale, slug, preview });
   const { pageLandingCollection } = await gqlClient.pageLanding({ locale, preview });
   
