@@ -11,7 +11,7 @@ import { client, previewClient } from '@src/lib/client';
 export async function generateMetadata({
   params: { locale, slug },
 }: BlogPageProps): Promise<Metadata> {
-  const { isEnabled: preview } = draftMode();
+  const { isEnabled: preview } = await draftMode();
   const gqlClient = preview ? previewClient : client;
 
   const { pageBlogPostCollection } = await gqlClient.pageBlogPost({ locale, slug, preview });
@@ -69,7 +69,7 @@ interface BlogPageProps {
 }
 
 export default async function Page({ params: { locale, slug } }: BlogPageProps) {
-  const { isEnabled: preview } = draftMode();
+  const { isEnabled: preview } = await draftMode();
   const gqlClient = preview ? previewClient : client;
   const { t } = await initTranslations({ locale });
   const { pageBlogPostCollection } = await gqlClient.pageBlogPost({ locale, slug, preview });
