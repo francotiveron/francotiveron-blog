@@ -4,15 +4,15 @@ import { getSdk } from '@src/lib/__generated/sdk';
 import { endpoint } from 'codegen';
 
 const graphQlClient = new GraphQLClient(endpoint, {
-  headers: {
-    Authorization: `Bearer ${process.env.CONTENTFUL_ACCESS_TOKEN}`,
-  },
+    headers: {
+          Authorization: `Bearer ${process.env.CONTENTFUL_ACCESS_TOKEN}`,
+    },
 });
 
-const previewGraphQlClient = new GraphQLClient(endpoint.replace('graphql.contentful.com', 'preview.contentful.com'), {
-  headers: {
-    Authorization: `Bearer ${process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN}`,
-  },
+const previewGraphQlClient = new GraphQLClient(endpoint, {
+    headers: {
+          Authorization: `Bearer ${process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN}`,
+    },
 });
 
 export const client = getSdk(graphQlClient);
